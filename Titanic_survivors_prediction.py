@@ -15,7 +15,7 @@ testing_data = p.read_csv( "C:/Users/AWIKSSHIITH/OneDrive/Desktop/testing data.c
 training_data.dropna( inplace = True ) #Removes the row which don't have information
 testing_data.dropna( inplace = True ) #Removes the row which don't have information
 y = training_data[ 'Survived' ].values
-x = training_data.drop( [ 'Survived', 'Name', 'Sex', 'Ticket', 'Cabin', 'Embarked' ], axis = 1 ) #We're dropping these because the 'Survived' column is our taret and other mentioned columns don't affect the surviving chance of the passenger.
+x = training_data.drop( [ 'Survived', 'Name', 'Sex', 'Ticket', 'Cabin', 'Embarked' ], axis = 1 ) #We're dropping these because the 'Survived' column is our target and other mentioned columns don't affect the surviving chance of the passenger.
 x_guess = testing_data.drop( ['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked' ], axis = 1 ) #We're dropping these because they don't affect the surviving chance of the passenger.
 
 #Preparing the data:
