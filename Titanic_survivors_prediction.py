@@ -1,4 +1,5 @@
 import pandas as p
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
@@ -15,8 +16,17 @@ testing_data = p.read_csv( "C:/Users/AWIKSSHIITH/OneDrive/Desktop/testing data.c
 training_data.dropna( inplace = True ) #Removes the row which don't have information
 testing_data.dropna( inplace = True ) #Removes the row which don't have information
 y = training_data[ 'Survived' ].values
-x = training_data.drop( [ 'Survived', 'Name', 'Sex', 'Ticket', 'Cabin', 'Embarked' ], axis = 1 ) #We're dropping these because the 'Survived' column is our target and other mentioned columns don't affect the surviving chance of the passenger.
-x_guess = testing_data.drop( ['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked' ], axis = 1 ) #We're dropping these because they don't affect the surviving chance of the passenger.
+x = training_data.drop( [ 'Survived', 'Name' ], axis = 1 ) #We're dropping these because the 'Survived' column is our target Names don't affect the surviving chance of the passenger.
+x_guess = testing_data.drop( [ 'Name' ], axis = 1 ) #We're dropping these because they don't affect the surviving chance of the passenger.
+label_encoder = LabelEncoder() #Assigns a numerical value to the string data.
+x[ 'Sex' ] = label_encoder.fit_transform( x[ 'Sex' ] )
+x[ 'Ticket' ] = label_encoder.fit_transform( x[ 'Ticket' ] )
+x[ 'Cabin' ] = label_encoder.fit_transform( x[ 'Cabin' ] )
+x[ 'Embarked' ] = label_encoder.fit_transform( x[ 'Embarked' ] )
+x_guess[ 'Sex' ] = label_encoder.fit_transform( x_guess[ 'Sex' ] )
+x_guess[ 'Ticket' ] = label_encoder.fit_transform( x_guess[ 'Ticket' ] )
+x_guess[ 'Cabin' ] = label_encoder.fit_transform( x_guess[ 'Cabin' ] )
+x_guess[ 'Embarked' ] = label_encoder.fit_transform( x_guess[ 'Embarked' ] )
 
 #Preparing the data:
 x_train, x_test, y_train, y_test = train_test_split( x, y, test_size = 0.2, random_state = 0 )
@@ -68,13 +78,11 @@ plt.ylabel( 'Test accuracy' )
 plt.show()
 
 #Choosing the model having highest accuracy and predicting for testing data set:
-print( 'As shown above, K-nearest neighbors and Support Vector Machine algorithm have the highest accuracies.' )
+print( 'As shown as above, Logistic Regression and Random Forest have the highest accuracies.' )
 print( 'Hence we use any of the above for prediction of testing data set. I am using both.' )
-knn = KNeighborsClassifier( n_neighbors = 8 )
-knn.fit( x_train, y_train )
-y_pred_knn = knn.predict( x_guess )
-y_pred_svm = svm.predict( x_guess )
-x_guess[ 'Survivors prediction from KNN' ] = y_pred_knn
-x_guess[ 'Survivors prediction from SVM' ] = y_pred_svm
-result = p.merge( testing_data, x_guess[ [ 'Survivors prediction from KNN', 'Survivors prediction from SVM' ] ], left_index = True, right_index = True )
+y_pred_log_reg = log_reg.predict( x_guess )
+y_pred_rf = rf.predict( x_guess )
+x_guess[ 'Survivors prediction from LR' ] = y_pred_log_reg
+x_guess[ 'Survivors prediction from RF' ] = y_pred_rf
+result = p.merge( testing_data, x_guess[ [ 'Survivors prediction from LR', 'Survivors prediction from RF' ] ], left_index = True, right_index = True )
 print( result )
